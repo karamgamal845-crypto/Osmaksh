@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osman Rafaat | Fine Artist — Egypt</title>
+    <meta name="description" content="Contemporary fine artist from Minya, Egypt. Original oil paintings inspired by the Nile Valley, heritage, and light. Commission inquiries welcome.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg-primary:#fafaf8; --text-primary:#1a1814;
+            --accent:#b49450; --accent-dark:#8b7340;
+            --dark-bg:#1e1b18; --white:#ffffff; --border-light:#eae7e0;
+            --text-muted:#6b6b6b;
+        }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.6; }
+        nav {
+            position:fixed; top:0; left:0; right:0; z-index:1000;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:1.2rem 3rem; background:rgba(250,250,248,0.85);
+            backdrop-filter:blur(12px); border-bottom:1px solid var(--border-light);
+        }
+        .nav-logo a {
+            display:flex; align-items:center; text-decoration:none;
+            color:var(--text-primary); font-family:'Cormorant Garamond',serif;
+            font-size:1.6rem; font-style:italic;
+        }
+        .nav-logo img {
+            height:44px; width:44px; border-radius:50%; object-fit:cover;
+            margin-right:0.8rem; border:2px solid var(--border-light);
+        }
+        .nav-links { display:flex; gap:2.5rem; list-style:none; }
+        .nav-links a {
+            text-decoration:none; color:var(--text-primary);
+            font-size:0.95rem; font-weight:500; transition:color 0.3s;
+        }
+        .nav-links a:hover { color:var(--accent); }
+        .btn-nav {
+            padding:0.6rem 1.4rem; background:var(--accent);
+            color:white !important; border-radius:30px; font-weight:600;
+            font-size:0.85rem; text-decoration:none;
+        }
+        .hero {
+            position:relative; height:100vh; display:flex; flex-direction:column;
+            justify-content:center; align-items:center; text-align:center;
+            color:white; overflow:hidden; background:#1a1814; margin-top:80px;
+        }
+        .hero-bg-image {
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            background:url('https://res.cloudinary.com/dz7wu111o/image/upload/IMG20260404140158_exo1i0.jpg') center/cover no-repeat;
+            z-index:0; filter:brightness(0.5);
+        }
+        .hero-content { position:relative; z-index:1; padding:2rem; }
+        .hero-content h3 {
+            font-size:1rem; letter-spacing:3px; text-transform:uppercase;
+            margin-bottom:1.5rem; opacity:0.9;
+        }
+        .hero-content h1 {
+            font-family:'Cormorant Garamond',serif; font-size:6rem;
+            font-style:italic; font-weight:400; margin-bottom:1rem;
+        }
+        .hero-content p { font-size:1.3rem; margin-bottom:3rem; opacity:0.9; }
+        .hero-buttons { display:flex; gap:1.2rem; justify-content:center; }
+        .btn-hero {
+            padding:0.9rem 2.2rem; border-radius:30px; font-weight:600;
+            text-decoration:none; transition:all 0.3s; border:1.5px solid transparent;
+        }
+        .btn-primary { background:var(--accent); color:white; border-color:var(--accent); }
+        .btn-primary:hover { background:var(--accent-dark); }
+        .btn-outline { background:transparent; color:white; border-color:rgba(255,255,255,0.5); }
+        .btn-outline:hover { background:rgba(255,255,255,0.15); border-color:white; }
+        .gallery { padding:6rem 3rem; }
+        .gallery-header { text-align:center; margin-bottom:4rem; }
+        .gallery-header h2 {
+            font-family:'Cormorant Garamond',serif; font-size:3.2rem;
+            font-style:italic; margin-bottom:1rem;
+        }
+        .gallery-header p { color:var(--text-muted); font-size:1.1rem; max-width:600px; margin:0 auto; }
+        .gallery-filters { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:3rem; }
+        .filter-btn {
+            background:none; border:none; font-family:'Inter',sans-serif;
+            font-size:0.9rem; color:var(--text-muted); cursor:pointer;
+            padding:0.5rem 1.2rem; border-radius:20px; transition:all 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover { background:var(--accent); color:white; }
+        .gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5rem; max-width:1400px; margin:0 auto; }
+        .artwork-card {
+            cursor:pointer; background:var(--white); border-radius:4px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.05); transition:transform 0.3s, box-shadow 0.3s; overflow:hidden;
+        }
+        .artwork-card:hover { transform:translateY(-8px); box-shadow:0 15px 35px rgba(0,0,0,0.1); }
+        .artwork-image { width:100%; aspect-ratio:4/5; overflow:hidden; position:relative; background:#f0ede6; }
+        .artwork-image img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s, filter 0.3s; filter:saturate(0.85); }
+        .artwork-card:hover .artwork-image img { transform:scale(1.04); filter:saturate(1); }
+        .artwork-info { padding:1.5rem; }
+        .artwork-info h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; margin-bottom:0.4rem; }
+        .artwork-info .meta { font-size:0.85rem; color:var(--text-muted); margin-bottom:0.6rem; text-transform:uppercase; }
+        .artwork-price { font-size:1.1rem; color:var(--accent-dark); font-weight:600; }
+        .modal {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; padding:2rem;
+        }
+        .modal.active { display:flex; }
+        .modal-content {
+            background:white; border-radius:2px; max-width:1100px; width:100%;
+            max-height:90vh; overflow-y:auto; display:grid; grid-template-columns:1fr 1fr;
+            position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal-close {
+            position:absolute; top:1rem; right:1.2rem; background:none; border:none;
+            font-size:2.2rem; cursor:pointer; color:var(--text-primary); z-index:10;
+            width:40px; height:40px; display:flex; align-items:center; justify-content:center;
+        }
+        .modal-close:hover { color:var(--accent); }
+        .modal-image-wrapper { background:#f5f3ef; display:flex; align-items:center; justify-content:center; padding:2rem; }
+        .modal-image { max-width:100%; max-height:70vh; object-fit:contain; }
+        .modal-details { padding:3rem 2.5rem; display:flex; flex-direction:column; }
+        .modal-details h2 {
+            font-family:'Cormorant Garamond',serif; font-size:2.4rem;
+            font-style:italic; margin-bottom:0.8rem;
+        }
+        .modal-price {
+            font-size:1.8rem; color:var(--accent-dark); font-weight:600;
+            margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-light);
+        }
+        .modal-detail-row { display:grid; grid-template-columns:110px 1fr; gap:1rem; margin-bottom:1rem; font-size:0.95rem; }
+        .modal-detail-row strong { color:var(--text-primary); font-weight:600; }
+        .modal-description { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border-light); font-size:0.95rem; line-height:1.8; color:#555; flex:1; }
+        .whatsapp-btn {
+            display:inline-block; margin-top:auto; padding:0.9rem 2rem;
+            background:#25d366; color:white; text-decoration:none; border-radius:4px;
+            font-weight:600; transition:background 0.3s; border:none; cursor:pointer; font-size:1rem; text-align:center;
+        }
+        .whatsapp-btn:hover { background:#1da851; }
+        .about {
+            background:var(--dark-bg); color:white; padding:6rem 3rem;
+            display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;
+        }
+        .about-image { position:relative; }
+        .about-image img { width:100%; border-radius:2px; box-shadow:0 15px 40px rgba(0,0,0,0.4); }
+        .about-image::before {
+            content:''; position:absolute; top:-20px; left:-20px;
+            width:100%; height:100%; border:2px solid var(--accent); border-radius:2px; pointer-events:none;
+        }
+        .about-text h3 { font-size:0.9rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem; opacity:0.8; }
+        .about-text h2 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-style:italic; margin-bottom:2rem; color:#c9a86c; }
+        .about-text p { font-size:1.05rem; line-height:1.9; margin-bottom:1.5rem; opacity:0.9; }
+        .about-quote { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-style:italic; margin-top:2rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.2); color:#c9a86c; }
+        .commission { padding:6rem 3rem; text-align:center; }
+        .commission h2 { font-family:'Cormorant Garamond',serif; font-size:3rem; font-style:italic; margin-bottom:1.5rem; }
+        .commission p { max-width:650px; margin:0 auto 2.5rem; color:var(--text-muted); font-size:1.1rem; }
+        .commission-form { max-width:600px; margin:0 auto; display:grid; gap:1.2rem; text-align:left; }
+        .commission-form input, .commission-form textarea { width:100%; padding:0.9rem 1.2rem; border:1px solid var(--border-light); border-radius:4px; font-family:'Inter',sans-serif; font-size:0.95rem; }
+        .commission-form input:focus, .commission-form textarea:focus { outline:none; border-color:var(--accent); }
+        .commission-form button { padding:0.9rem 2rem; background:var(--accent); color:white; border:none; border-radius:4px; font-weight:600; font-size:1rem; cursor:pointer; transition:background 0.3s; justify-self:start; }
+        .commission-form button:hover { background:var(--accent-dark); }
+        .testimonials { background:#f4f2ed; padding:5rem 3rem; text-align:center; }
+        .testimonials h2 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-style:italic; margin-bottom:3rem; }
+        .testimonial-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2.5rem; max-width:1000px; margin:0 auto; }
+        .testimonial-card { background:white; padding:2.5rem 2rem; border-radius:4px; box-shadow:0 8px 25px rgba(0,0,0,0.04); }
+        .testimonial-card p { font-style:italic; color:#444; line-height:1.7; margin-bottom:1.5rem; }
+        .testimonial-card .author { font-weight:600; color:var(--accent-dark); }
+        footer { background:var(--dark-bg); color:rgba(255,255,255,0.7); padding:3rem; text-align:center; }
+        .footer-logo { display:flex; justify-content:center; margin-bottom:1.5rem; }
+        .footer-logo img { height:40px; opacity:0.6; border-radius:50%; }
+        .footer-text { font-size:0.9rem; margin-bottom:1.8rem; }
+        .footer-buttons { display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; }
+        .footer-btn { padding:0.6rem 1.6rem; background:transparent; color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.3); border-radius:30px; text-decoration:none; font-size:0.9rem; transition:all 0.3s; }
+        .footer-btn:hover { background:var(--accent); border-color:var(--accent); color:white; }
+        @media (max-width:1024px) {
+            .gallery-grid { grid-template-columns:repeat(2,1fr); }
+            .modal-content { grid-template-columns:1fr; }
+            .about { grid-template-columns:1fr; }
+            .hero-content h1 { font-size:4rem; }
+        }
+        @media (max-width:768px) {
+            nav { padding:1rem 1.5rem; flex-direction:column; gap:0.8rem; }
+            .nav-links { gap:1.2rem; }
+            .gallery-grid { grid-template-columns:1fr; }
+            .hero-content h1 { font-size:3rem; }
+            .about { padding:4rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo
+          
