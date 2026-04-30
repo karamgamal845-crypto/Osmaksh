@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ميزان - مساعد المحامي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface2: #16213e;
+    --accent: #c9a84c;
+    --accent2: #e8c97a;
+    --text: #f0ece0;
+    --text2: #a09880;
+    --danger: #e05c5c;
+    --success: #5cb85c;
+    --warning: #e08c3c;
+    --border: rgba(201,168,76,0.15);
+    --radius: 16px;
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ===== LOGIN ===== */
+  #loginScreen {
+    background: radial-gradient(ellipse at 30% 20%, #1e2a4a 0%, #0f0f1a 60%),
+                radial-gradient(ellipse at 80% 80%, #2a1a0e 0%, transparent 50%);
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+  }
+
+  .logo-wrap {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .logo-icon {
+    width: 80px; height: 80px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 8px 32px rgba(201,168,76,0.3);
+  }
+
+  .logo-title {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .logo-sub {
+    font-size: 14px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  }
+
+  .login-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .field input, .field select, .field textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .field select option { background: var(--surface); }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #1a1a00;
+  }
+
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    margin-top: 12px;
+  }
+
+  .switch-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text2);
+  }
+
+  .switch-link span {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  /* ===== MAIN APP ===== */
+  #appScreen { background: var(--bg); }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-logo {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    color: #1a1a00;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 14px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* SECTION */
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ALERT CARDS */
+  .alert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    border-right: 4px solid var(--warning);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .alert-card:active { transform: scale(0.99); }
+  .alert-card.urgent { border-right-color: var(--danger); }
+  .alert-card.safe { border-right-color: var(--success); }
+
+  .alert-days {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--warning);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .alert-card.urgent .alert-days { color: var(--danger); }
+  .alert-card.safe .alert-days { color: var(--success); }
+
+  .alert-info { flex: 1; }
+  .alert-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .alert-type { font-size: 12px; color: var(--text2); }
+  .alert-date { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  /* CASE CARDS */
+  .case-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .case-card:active { transform: scale(0.99); }
+
+  .case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .case-name { font-size: 16px; font-weight: 700; }
+  .case-number { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  .badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-active { background: rgba(92,184,92,0.15); color: var(--success); }
+  .badge-urgent { background: rgba(224,92,92,0.15); color: var(--danger); }
+  .badge-pending { background: rgba(201,168,76,0.15); color: var(--accent); }
+
+  .case-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .case-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .case-next {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .case-next strong { color: var(--accent); }
+
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #1a1a00;
+    border: none;
+    border-radius: 28px;
+    padding: 16px 32px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    z-index: 50;
+  }
+
+  .fab:active { transform: translateX(-50%) scale(0.97); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* PROCEDURE TYPES */
+  .proc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .proc-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text2);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .proc-btn.selected {
+    border-color: var(--accent);
+    background: rgba(201,168,76,0.1);
+    color: var(--accent);
+  }
+
+  .proc-btn .proc-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+  /* CALENDAR */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  .cal-header {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text2);
+    padding: 4px;
+    font-weight: 600;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .cal-day:hover { background: var(--border); }
+  .cal-day.today { background: rgba(201,168,76,0.2); color: var(--accent); font-weight: 700; }
+  .cal-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    width: 4px; height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .cal-day.empty { cursor: default; }
+
+  .cal-month {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cal-nav { cursor: pointer; padding: 4px 8px; color: var(--accent); font-size: 18px; }
+
+  /* DEADLINE CHIPS */
+  .deadline-list { margin-top: 8px; }
+
+  .deadline-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .deadline-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .deadline-info { flex: 1; }
+  .deadline-name { font-size: 13px; font-weight: 600; }
+  .deadline-date { font-size: 11px; color: var(--text2); }
+  .deadline-days { font-size: 12px; font-weight: 700; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+  }
+
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* CASE DETAIL */
+  .detail-header {
+    background: linear-gradient(135deg, var(--surface2), var(--surface));
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .detail-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .detail-sub { font-size: 13px; color: var(--text2); }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .info-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .info-item label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 4px; }
+  .info-item span { font-size: 14px; font-weight: 600; }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+
+  /* NOTIFICATION TOAST */
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    z-index: 300;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .toast.show { opacity: 1; }
+
+  /* SEARCH */
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    margin-bottom: 16px;
+  }
+
+  .search-box:focus { border-color: var(--accent); }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="screen active">
+  <div class="logo-wrap">
+    <div class="logo-icon">⚖️</div>
+    <div class="logo-title">ميزان</div>
+    <div class="logo-sub">مساعد المحامي الذكي</div>
+  </div>
+
+  <div class="login-card">
+    <h2 id="loginTitle">تسجيل الدخول</h2>
+
+    <div id="loginFields">
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="loginEmail" placeholder="example@law.com">
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="loginPass" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">دخول</button>
+    </div>
+
+    <div id="registerFields" style="display:none">
+      <div class="field">
+        <label>الاسم الكامل</label>
+        <input type="text" id="regName" placeholder="المحامي / نور أحمد">
+      </div>
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="regEmail" placeholder="example@law.com">
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="regPass" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" onclick="doRegister()">إنشاء حساب</button>
+    </div>
+
+    <div class="switch-link" id="switchText">
+      مش عندك حساب؟ <span onclick="toggleAuth()">سجل دلوقتي</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP SCREEN -->
+<div id="appScreen" class="screen">
+
+  <div class="header">
+    <div class="header-logo">⚖️ ميزان</div>
+    <div class="header-user">
+      <div class="avatar" id="userAvatar" onclick="showToast('تسجيل الخروج')">م</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('home', this)">
+      <span class="tab-icon">🏠</span>الرئيسية
+    </div>
+    <div class="tab" onclick="switchTab('cases', this)">
+      <span class="tab-icon">📁</span>القضايا
+    </div>
+    <div class="tab" onclick="switchTab('calendar', this)">
+      <span class="tab-icon">📅</span>التقويم
+    </div>
+    <div class="tab" onclick="switchTab('alerts', this)">
+      <span class="tab-icon">🔔</span>التنبيهات
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HOME TAB -->
+    <div class="tab-content active" id="tab-home">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" id="statTotal">0</div>
+          <div class="stat-label">إجمالي القضايا</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statUrgent" style="color:var(--danger)">0</div>
+          <div class="stat-label">مواعيد عاجلة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statWeek" style="color:var(--warning)">0</div>
+          <div class="stat-label">هذا الأسبوع</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statActive" style="color:var(--success)">0</div>
+          <div class="stat-label">قضايا نشطة</div>
+        </div>
+      </div>
+
+      <div class="section-title">⚡ مواعيد عاجلة</div>
+      <div id="urgentList"></div>
+
+      <div class="section-title" style="margin-top:20px">📋 آخر القضايا</div>
+      <div id="recentCases"></div>
+    </div>
+
+    <!-- CASES TAB -->
+    <div class="tab-content" id="tab-cases">
+      <input class="search-box" placeholder="🔍 ابحث عن قضية أو موكل..." oninput="filterCases(this.value)">
+      <div id="casesList"></div>
+    </div>
+
+    <!-- CALENDAR TAB -->
+    <div class="tab-content" id="tab-calendar">
+      <div class="cal-month">
+        <span class="cal-nav" onclick="changeMonth(-1)">›</span>
+        <span id="calTitle"></span>
+        <span class="cal-nav" onclick="changeMonth(1)">‹</span>
+      </div>
+      <div class="calendar-grid" id="calGrid"></div>
+      <div class="section-title">📌 مواعيد الشهر</div>
+      <div id="monthEvents"></div>
+    </div>
+
+    <!-- ALERTS TAB -->
+    <div class="tab-content" id="tab-alerts">
+      <div class="section-title">🚨 كل التنبيهات</div>
+      <div id="allAlerts"></div>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" onclick="openAddCase()">
+    <span>+</span> قضية جديدة
+  </button>
+
+</div>
+
+<!-- CASE DETAIL SCREEN -->
+<div id="detailScreen" class="screen">
+  <div class="header">
+    <div class="header-logo">⚖️ ميزان</div>
+    <div class="back-btn" onclick="goBack()" style="margin:0">← رجوع</div>
+  </div>
+  <div class="content" id="detailContent"></div>
+</div>
+
+<!-- ADD CASE MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📁 إضافة قضية جديدة</div>
+
+    <div class="field">
+      <label>اسم الموكل</label>
+      <input type="text" id="clientName" placeholder="مثال: أحمد محمد علي">
+    </div>
+
+    <div class="field">
+      <label>رقم القضية</label>
+      <input type="text" id="caseNum" placeholder="مثال: 1234/2025">
+    </div>
+
+    <div class="field">
+      <label>المحكمة</label>
+      <select id="court">
+        <option value="">اختر المحكمة</option>
+        <option>محكمة شمال القاهرة الابتدائية</option>
+        <option>محكمة جنوب القاهرة الابتدائية</option>
+        <option>محكمة الجيزة الابتدائية</option>
+        <option>محكمة شبرا الخيمة الابتدائية</option>
+        <option>محكمة الإسكندرية الابتدائية</option>
+        <option>محكمة استئناف القاهرة</option>
+        <option>محكمة النقض</option>
+        <option>أخرى</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>نوع الإجراء القانوني</label>
+      <div class="proc-grid">
+        <div class="proc-btn" onclick="selectProc(this, 'جلسة')" data-days="0">
+          <span class="proc-icon">🏛️</span>جلسة
+        </div>
+        <div class="proc-btn" onclick="selectProc(this, 'استئناف')" data-days="60">
+          <span class="proc-icon">📜</span>استئناف (60 يوم)
+        </div>
+        <div class="proc-btn" onclick="selectProc(this, 'معارضة')" data-days="10">
+          <span class="proc-icon">⚖️</span>معارضة (10 أيام)
+        </div>
+        <div class="proc-btn" onclick="selectProc(this, 'طعن بالنقض')" data-days="90">
+          <span class="proc-icon">🔨</span>طعن بالنقض (90 يوم)
+        </div>
+        <div class="proc-btn" onclick="selectProc(this, 'تنفيذ حكم')" data-days="0">
+          <span class="proc-icon">✅</span>تنفيذ حكم
+        </div>
+        <div class="proc-btn" onclick="selectProc(this, 'إشكال')" data-days="0">
+          <span class="proc-icon">⛔</span>إشكال
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label id="dateLabel">تاريخ الجلسة / الحكم</label>
+      <input type="date" id="caseDate">
+    </div>
+
+    <div class="field">
+      <label>نوع القضية</label>
+      <select id="caseType">
+        <option value="">اختر النوع</option>
+        <option>مدني</option>
+        <option>جنائي</option>
+        <option>تجاري</option>
+        <option>أحوال شخصية</option>
+        <option>عمالي</option>
+        <option>إداري</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>ملاحظات</label>
+      <textarea id="caseNotes" rows="3" placeholder="أي تفاصيل إضافية..."></textarea>
+    </div>
+
+    <button class="btn btn-primary" onclick="saveCase()">💾 حفظ القضية</button>
+    <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== STATE =====
+let cases = JSON.parse(localStorage.getItem('meezan_cases') || '[]');
+let currentUser = localStorage.getItem('meezan_user') || null;
+let selectedProc = '';
+let calDate = new Date();
+let filterQuery = '';
+
+// ===== AUTH =====
+function toggleAuth() {
+  const isLogin = document.getElementById('loginFields').style.display !== 'none';
+  document.getElementById('loginFields').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('registerFields').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('loginTitle').textContent = isLogin ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  document.getElementById('switchText').innerHTML = isLogin
+    ? 'عندك حساب؟ <span onclick="toggleAuth()">سجل دخول</span>'
+    : 'مش عندك حساب؟ <span onclick="toggleAuth()">سجل دلوقتي</span>';
+}
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) { showToast('⚠️ ادخل البيانات'); return; }
+  const name = email.split('@')[0];
+  currentUser = name;
+  localStorage.setItem('meezan_user', name);
+  enterApp(name);
+}
+
+function doRegister() {
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const pass = document.getElementById('regPass').value;
+  if (!name || !email || !pass) { showToast('⚠️ ادخل كل البيانات'); return; }
+  currentUser = name;
+  localStorage.setItem('meezan_user', name);
+  enterApp(name);
+}
+
+function enterApp(name) {
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+  showScreen('appScreen');
+  refreshAll();
+  showToast('👋 أهلاً ' + name);
+}
+
+// ===== SCREENS =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() { showScreen('appScreen'); }
+
+// ===== TABS =====
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (id === 'calendar') renderCalendar();
+  if (id === 'alerts') renderAlerts();
+  if (id === 'cases') renderCases();
+}
+
+// ===== CASE LOGIC =====
+const PROC_RULES = {
+  'استئناف': 60,
+  'معارضة': 10,
+  'طعن بالنقض': 90,
+  'جلسة': 0,
+  'تنفيذ حكم': 0,
+  'إشكال': 0
+};
+
+function calcDeadline(dateStr, proc) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  const days = PROC_RULES[proc] || 0;
+  if (days > 0) {
+    d.setDate(d.getDate() + days);
+  }
+  return d;
+}
+
+function daysUntil(date) {
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  return Math.round((d - now) / 86400000);
+}
+
+function formatDate(date) {
+  if (!date) return '';
+  return new Date(date).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function getStatus(c) {
+  if (!c.deadline) return 'pending';
+  const d = daysUntil(c.deadline);
+  if (d < 0) return 'expired';
+  if (d <= 3) return 'urgent';
+  return 'active';
+}
+
+// ===== ADD CASE =====
+function openAddCase() {
+  document.getElementById('addModal').classList.add('open');
+  document.getElementById('caseDate').value = new Date().toISOString().split('T')[0];
+}
+
+function closeModal() {
+  document.getElementById('addModal').classList.remove('open');
+  selectedProc = '';
+  document.querySelectorAll('.proc-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function selectProc(el, name) {
+  document.querySelectorAll('.proc-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedProc = name;
+  const days = parseInt(el.dataset.days);
+  document.getElementById('dateLabel').textContent =
+    days > 0 ? `تاريخ الحكم (سيتم حساب مدة ${name} تلقائياً)` : 'تاريخ الجلسة';
+}
+
+function saveCase() {
+  const client = document.getElementById('clientName').value.trim();
+  const num = document.getElementById('caseNum').value.trim();
+  const court = document.getElementById('court').value;
+  const date = document.getElementById('caseDate').value;
+  const type = document.getElementById('caseType').value;
+  const notes = document.getElementById('caseNotes').value.trim();
+
+  if (!client || !date || !selectedProc) {
+    showToast('⚠️ ادخل اسم الموكل والتاريخ ونوع الإجراء');
+    return;
+  }
+
+  const deadline = calcDeadline(date, selectedProc);
+
+  const newCase = {
+    id: Date.now(),
+    client,
+    num: num || 'غير محدد',
+    court: court || 'غير محدد',
+    proc: selectedProc,
+    date,
+    deadline: deadline ? deadline.toISOString().split('T')[0] : date,
+    type: type || 'غير محدد',
+    notes,
+    created: new Date().toISOString()
+  };
+
+  cases.unshift(newCase);
+  saveCases();
+  closeModal();
+  refreshAll();
+  showToast('✅ تم حفظ القضية');
+
+  // Reset form
+  ['clientName','caseNum','caseNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('court').selectedIndex = 0;
+  document.getElementById('caseType').selectedIndex = 0;
+}
+
+function saveCases() {
+  localStorage.setItem('meezan_cases', JSON.stringify(cases));
+}
+
+// ===== RENDER =====
+function refreshAll() {
+  renderHome();
+  renderCases();
+}
+
+function renderHome() {
+  const urgent = cases.filter(c => { const d = daysUntil(c.deadline); return d >= 0 && d <= 3; });
+  const week = cases.filter(c => { const d = daysUntil(c.deadline); return d >= 0 && d <= 7; });
+  const active = cases.filter(c => daysUntil(c.deadline) >= 0);
+
+  document.getElementById('statTotal').textContent = cases.length;
+  document.getElementById('statUrgent').textContent = urgent.length;
+  document.getElementById('statWeek').textContent = week.length;
+  document.getElementById('statActive').textContent = active.length;
+
+  const urgentList = document.getElementById('urgentList');
+  if (urgent.length === 0) {
+    urgentList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">✅ لا توجد مواعيد عاجلة</div>';
+  } else {
+    urgentList.innerHTML = urgent.map(c => alertCard(c)).join('');
+  }
+
+  const recentList = document.getElementById('recentCases');
+  recentList.innerHTML = cases.slice(0,3).map(c => caseCard(c)).join('') ||
+    '<div style="text-align:center;padding:40px;color:var(--text2)">لا توجد قضايا بعد</div>';
+}
+
+function alertCard(c) {
+  const d = daysUntil(c.deadline);
+  const cls = d <= 1 ? 'urgent' : d <= 3 ? '' : 'safe';
+  const label = d === 0 ? 'اليوم!' : d === 1 ? 'غداً!' : `${d} أيام`;
+  return `<div class="alert-card ${cls}" onclick="showDetail(${c.id})">
+    <div class="alert-days">${label}</div>
+    <div class="alert-info">
+      <div class="alert-name">${c.client}</div>
+      <div class="alert-type">${c.proc}</div>
+      <div class="alert-date">📅 ${formatDate(c.deadline)}</div>
+    </div>
+    <div>›</div>
+  </div>`;
+}
+
+function caseCard(c) {
+  const d = daysUntil(c.deadline);
+  const status = getStatus(c);
+  const badgeClass = status === 'urgent' ? 'badge-urgent' : status === 'active' ? 'badge-active' : 'badge-pending';
+  const badgeText = status === 'urgent' ? 'عاجل' : status === 'active' ? 'نشط' : status === 'expired' ? 'منتهي' : 'معلق';
+  return `<div class="case-card" onclick="showDetail(${c.id})">
+    <div class="case-header">
+      <div>
+        <div class="case-name">${c.client}</div>
+        <div class="case-number">📋 ${c.num}</div>
+      </div>
+      <span class="badge ${badgeClass}">${badgeText}</span>
+    </div>
+    <div class="case-meta">
+      <span>🏛️ ${c.court.replace('محكمة ','').replace(' الابتدائية','')}</span>
+      <span>⚖️ ${c.type}</span>
+    </div>
+    <div class="case-next">
+      <span>${c.proc}:</span>
+      <strong>${formatDate(c.deadline)}</strong>
+      ${d >= 0 ? `<span style="color:${d<=3?'var(--danger)':d<=7?'var(--warning)':'var(--text2)'}">(${d === 0 ? 'اليوم' : d + ' يوم'})</span>` : '<span style="color:var(--danger)">(منتهي)</span>'}
+    </div>
+  </div>`;
+}
+
+function renderCases() {
+  const q = filterQuery.toLowerCase();
+  const filtered = q ? cases.filter(c =>
+    c.client.toLowerCase().includes(q) ||
+    c.num.toLowerCase().includes(q) ||
+    c.court.toLowerCase().includes(q)
+  ) : cases;
+
+  const list = document.getElementById('casesList');
+  list.innerHTML = filtered.length ? filtered.map(c => caseCard(c)).join('') :
+    `<div class="empty-state"><div class="icon">📁</div><p>${q ? 'لا نتائج' : 'لا توجد قضايا بعد\nاضغط + لإضافة قضية'}</p></div>`;
+}
+
+function filterCases(q) {
+  filterQuery = q;
+  renderCases();
+}
+
+function renderAlerts() {
+  const sorted = [...cases].sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+  const list = document.getElementById('allAlerts');
+  list.innerHTML = sorted.length ? sorted.map(c => alertCard(c)).join('') :
+    '<div class="empty-state"><div class="icon">🔔</div><p>لا توجد تنبيهات</p></div>';
+}
+
+// ===== CALENDAR =====
+function renderCalendar() {
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('calTitle').textContent = `${months[month]} ${year}`;
+
+  const days = ['ح','ن','ث','ر','خ','ج','س'];
+  const first = new Date(year, month, 1).getDay();
+  const total = new Date(year, month+1, 0).getDate();
+  const today = new Date();
+
+  const eventDays = new Set();
+  cases.forEach(c => {
+    const d = new Date(c.deadline);
+    if (d.getMonth() === month && d.getFullYear() === year) {
+      eventDays.add(d.getDate());
+    }
+  });
+
+  let html = days.map(d => `<div class="cal-header">${d}</div>`).join('');
+  for (let i = 0; i < first; i++) html += '<div class="cal-day empty"></div>';
+  for (let d = 1; d <= total; d++) {
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    const hasEv = eventDays.has(d);
+    html += `<div class="cal-day ${isToday?'today':''} ${hasEv?'has-event':''}" onclick="showDayEvents(${year},${month},${d})">${d}</div>`;
+  }
+
+  document.getElementById('calGrid').innerHTML = html;
+  renderMonthEvents(year, month);
+}
+
+function renderMonthEvents(year, month) {
+  const evs = cases.filter(c => {
+    const d = new Date(c.deadline);
+    return d.getMonth() === month && d.getFullYear() === year;
+  }).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+
+  const colors = { urgent: '#e05c5c', active: '#5cb85c', expired: '#666', pending: '#c9a84c' };
+  document.getElementById('monthEvents').innerHTML = evs.length ?
+    evs.map(c => {
+      const status = getStatus(c);
+      return `<div class="deadline-chip" onclick="showDetail(${c.id})">
+        <div class="deadline-dot" style="background:${colors[status]}"></div>
+        <div class="deadline-info">
+          <div class="deadline-name">${c.client}</div>
+          <div class="deadline-date">${c.proc} • ${formatDate(c.deadline)}</div>
+        </div>
+        <div class="deadline-days" style="color:${colors[status]}">${daysUntil(c.deadline)}د</div>
+      </div>`;
+    }).join('') :
+    '<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">لا مواعيد هذا الشهر</div>';
+}
+
+function changeMonth(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  renderCalendar();
+}
+
+function showDayEvents(y, m, d) {
+  const evs = cases.filter(c => {
+    const dd = new Date(c.deadline);
+    return dd.getDate() === d && dd.getMonth() === m && dd.getFullYear() === y;
+  });
+  if (evs.length) showToast(`📅 ${evs.length} موعد في هذا اليوم`);
+}
+
+// ===== DETAIL =====
+function showDetail(id) {
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  const d = daysUntil(c.deadline);
+  const status = getStatus(c);
+  const statusColors = { urgent: 'var(--danger)', active: 'var(--success)', expired: 'var(--text2)', pending: 'var(--accent)' };
+  const pct = PROC_RULES[c.proc] > 0 ? Math.max(0, Math.min(100, Math.round((1 - d / PROC_RULES[c.proc]) * 100))) : 50;
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="back-btn" onclick="goBack()">← رجوع للقضايا</div>
+    <div class="detail-header">
+      <div class="detail-title">${c.client}</div>
+      <div class="detail-sub">📋 ${c.num} • ${c.type}</div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <label>المحكمة</label>
+        <span>🏛️ ${c.court.replace('محكمة ','')}</span>
+      </div>
+      <div class="info-item">
+        <label>نوع الإجراء</label>
+        <span>⚖️ ${c.proc}</span>
+      </div>
+      <div class="info-item">
+        <label>تاريخ الجلسة/الحكم</label>
+        <span>📅 ${formatDate(c.date)}</span>
+      </div>
+      <div class="info-item">
+        <label>الموعد النهائي</label>
+        <span style="color:${statusColors[status]}">⏰ ${formatDate(c.deadline)}</span>
+      </div>
+    </div>
+
+    ${PROC_RULES[c.proc] > 0 ? `
+    <div class="section-title">⏳ المدة المتبقية</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="color:var(--text2);font-size:13px">تقدم الميعاد</span>
+        <span style="color:${statusColors[status]};font-weight:700">${d >= 0 ? d + ' يوم متبقي' : 'انتهى الميعاد'}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text2)">
+        <span>تاريخ البداية</span>
+        <span>المدة: ${PROC_RULES[c.proc]} يوم</span>
+      </div>
+    </div>` : ''}
+
+    ${c.notes ? `
+    <div class="section-title">📝 ملاحظات</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;font-size:14px;line-height:1.7;color:var(--text2)">${c.notes}</div>` : ''}
+
+    <div class="section-title">⚠️ تحذيرات قانونية</div>
+    <div style="background:rgba(224,92,92,0.08);border:1px solid rgba(224,92,92,0.2);border-radius:var(--radius);padding:16px;margin-bottom:80px">
+      ${getLegalWarning(c.proc)}
+    </div>
+  `;
+
+  showScreen('detailScreen');
+}
+
+function getLegalWarning(proc) {
+  const warnings = {
+    'استئناف': '⚠️ مدة الاستئناف 60 يوم من تاريخ الحكم الحضوري أو من تاريخ العلم بالحكم الغيابي. انتهاء المدة يسقط الحق في الطعن نهائياً.',
+    'معارضة': '⚠️ المعارضة لا تقبل إلا إذا صدر الحكم غيابياً. مدتها 10 أيام من تاريخ إعلان الحكم للمحكوم عليه.',
+    'طعن بالنقض': '⚠️ مدة الطعن بالنقض 90 يوم من تاريخ الحكم النهائي. الطعن يوقف تنفيذ الحكم في بعض الحالات.',
+    'جلسة': '📌 تأكد من حضور الجلسة في الموعد المحدد. التأخر أو الغياب قد يترتب عليه اعتبار الدعوى كأن لم تكن.',
+    'تنفيذ حكم': '📌 يجب البدء في إجراءات التنفيذ فور صيرورة الحكم نهائياً لتفادي أي إشكاليات.',
+    'إشكال': '📌 تقديم الإشكال يوقف التنفيذ مؤقتاً حتى الفصل فيه من قبل المحكمة.'
+  };
+  return warnings[proc] || '📌 راجع المحامي للتأكد من الإجراءات القانونية المناسبة.';
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== INIT =====
+if (currentUser) {
+  enterApp(currentUser);
+}
+</script>
+</body>
+</html>
